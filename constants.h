@@ -4,6 +4,7 @@
 
 // For a static/global string constant
 // use a C style string instead: "static const char host[]".
+// https://www.geeksforgeeks.org/char-vs-stdstring-vs-char-c/
 
 namespace connection_constants {
 static const char host[] = "localhost";
