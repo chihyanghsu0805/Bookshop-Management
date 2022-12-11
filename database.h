@@ -19,7 +19,6 @@ class Database {
                const std::string,  // password
                const std::string,  // database
                const int);         // port
-  // Table Object?
   void add_book();
   void view_book();
   void search_book();
