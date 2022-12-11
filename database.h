@@ -23,6 +23,9 @@ class Database {
   void add_book();
   void view_book();
   void search_book();
+  bool search_book_id(int);
+  void update_book(std::string);
+  void print_book();
 };
 
 }  // namespace database
