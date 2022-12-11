@@ -1,4 +1,5 @@
 // Copyright [year] <Copyright Owner>
+// https://stackoverflow.com/questions/24255051/concatenate-char-arrays-in-c
 #include "./database.h"
 
 #include <mysql.h>
@@ -52,7 +53,7 @@ void database::Database::add_book() {
   std::cin >> quantity;
 
   std::stringstream statement("");  // #include <sstream>
-  statement << "INSERT INTO " + book::table_name +
+  statement << "INSERT INTO " + std::string(book::table_name) +
                    "(NAME, AUTHOR, PRICE, QUANTITY) VALUES('"
             << name << "','" << author << "'," << price << "," << quantity
             << ");";
@@ -72,7 +73,7 @@ void database::Database::view_book() {
   system("cls");
 
   std::stringstream statement("");  // #include <sstream>
-  statement << "SELECT * from " + book::table_name + ";";
+  statement << "SELECT * from " + std::string(book::table_name) + ";";
   mysql_query(db_conn, statement.str().c_str());
   res_set = mysql_store_result(db_conn);
 
@@ -98,8 +99,8 @@ void database::Database::search_book() {
 
 bool database::Database::search_book_id(int id) {
   std::stringstream statement("");  // #include <sstream>
-  statement << "SELECT * FROM " + book::table_name + " WHERE id = " << id
-            << ";";
+  statement << "SELECT * FROM " + std::string(book::table_name) + " WHERE id = "
+            << id << ";";
   mysql_query(db_conn, statement.str().c_str());
   res_set = mysql_store_result(db_conn);
 
@@ -144,20 +145,24 @@ void database::Database::update_book(std::string field) {
 
       std::stringstream statement("");  // #include <sstream>
       if (field == "price")
-        statement << "UPDATE " + book::table_name + " SET " + field + " = "
+        statement << "UPDATE " + std::string(book::table_name) + " SET " +
+                         field + " = "
                   << std::stoi(value) << " WHERE id = " << id << ";";
 
       if (field == "quantity")
-        statement << "UPDATE " + book::table_name + " SET " + field + " = "
+        statement << "UPDATE " + std::string(book::table_name) + " SET " +
+                         field + " = "
                   << std::stoi(value) << " WHERE id = " << id << ";";
 
       if (field == "author")
-        statement << "UPDATE " + book::table_name + " SET " + field + " = "
+        statement << "UPDATE " + std::string(book::table_name) + " SET " +
+                         field + " = "
                   << "'" << value << "'"
                   << " WHERE id = " << id << ";";
 
       if (field == "name")
-        statement << "UPDATE " + book::table_name + " SET " + field + " = "
+        statement << "UPDATE " + std::string(book::table_name) + " SET " +
+                         field + " = "
                   << "'" << value << "'"
                   << " WHERE id = " << id << ";";
 
