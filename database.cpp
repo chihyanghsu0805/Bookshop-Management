@@ -144,6 +144,9 @@ void database::Database::update_book(std::string field) {
       std::cin >> value;
 
       std::stringstream statement("");  // #include <sstream>
+
+      // Concatenate char[] with string
+      // Convert string to integer
       if (field == "price")
         statement << "UPDATE " + std::string(book::table_name) + " SET " +
                          field + " = "
@@ -154,6 +157,7 @@ void database::Database::update_book(std::string field) {
                          field + " = "
                   << std::stoi(value) << " WHERE id = " << id << ";";
 
+      // Add single quotes for string
       if (field == "author")
         statement << "UPDATE " + std::string(book::table_name) + " SET " +
                          field + " = "
