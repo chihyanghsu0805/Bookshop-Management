@@ -5,10 +5,9 @@
 // https://stackoverflow.com/questions/29915854/why-does-c-require-breaks-in-switch-statements
 // https://github.com/Aryan-Khanijo/Bookshop-Management-System-CPP-Project
 // https://www.codeguru.com/database/database-programming-with-c-c/
-// g++ -o bookshop_management.exe bookshop_management.cpp
-// database.cpp  book.cpp -I "C:/Program Files/MySQL/MySQL Server 8.0/include/"
-// -L "C:/Program Files/MySQL/MySQL Server 8.0/lib/"
-// -l libmysql
+// g++ -o bookshop_management.exe bookshop_management.cpp database.cpp book.cpp
+// supplier.cpp -I "C:/Program Files/MySQL/MySQL Server 8.0/include/" -L
+// "C:/Program Files/MySQL/MySQL Server 8.0/lib/" -l libmysql
 // constants.cpp
 
 #include <iostream>
@@ -16,6 +15,7 @@
 #include "./book.h"
 #include "./constants.h"
 #include "./database.h"
+#include "./supplier.h"
 
 enum Options {
   BOOKS = 1,
@@ -60,10 +60,12 @@ int main() {
       case BOOKS:
         book::menu(db);
         break;  // Fall through
-      /*
-      case SUPPLIERS:
-        supplier::menu();
 
+      case SUPPLIERS:
+        supplier::menu(db);
+        break;
+
+      /*
       case PURCHASES:
         menu::book();
 
@@ -86,7 +88,6 @@ int main() {
       std::cin.ignore();
     }
   }
-
   // Should we return?
   return 0;
 }

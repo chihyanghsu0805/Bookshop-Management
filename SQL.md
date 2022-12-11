@@ -7,6 +7,9 @@ USE database;
 SELECT * from table;
 SELECT * FROM table WHERE id = x;
 
+DESC table;
+DROP TABLE table;
+
 CREATE TABLE IF NOT EXISTS table (
   id INT NOT NULL AUTO_INCREMENT, `PRIMARY KEY`
   name varchar(255),
@@ -25,6 +28,7 @@ CREATE TABLE table (
 )
 
 INSERT INTO table (args) VALUES('strings', int);
-UPDATE table SET column = int WHERE id = x;
-UPDATE table SET column = 'string' WHERE id = x;
+UPDATE table SET column = int [WHERE condition];
+UPDATE table SET column = 'string' [WHERE condition];
+DELETE FROM table [WHERE condition];
 ```
