@@ -37,11 +37,10 @@ int menu() {
   std::cout << " 4. Employees" << std::endl;
   std::cout << " 5. Members" << std::endl;
   std::cout << " 6. Sales" << std::endl;
-  std::cout << " 7. Exit" << std::endl << std::endl << std::endl;
+  std::cout << " 7. Exit" << std::endl;
   std::cout << "Enter Choice: ";
 
   int c;
-
   std::cin >> c;
 
   return c;

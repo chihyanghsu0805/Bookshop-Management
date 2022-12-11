@@ -14,76 +14,100 @@ enum Options {
   VIEW = 1,
   ADD,
   SEARCH,
-  UPDATE_NAME,
-  UPDATE_AUTHOR,
-  UPDATE_PRICE,
-  UPDATE_QUANTITY,
+  UPDATE,
   RETURN,
 };
 
-void book::menu(database::Database* db) {
-  system("cls");
-
-  std::cout << " Books" << std::endl;
-  std::cout << " 1. VIEW" << std::endl;
-  std::cout << " 2. ADD" << std::endl;
-  std::cout << " 3. SEARCH" << std::endl;
-  std::cout << " 4. UPDATE NAME" << std::endl;
-  std::cout << " 5. UPDATE AUTHOR" << std::endl;
-  std::cout << " 6. UPDATE PRICE" << std::endl;
-  std::cout << " 7. UPDATE QUANTITY" << std::endl;
-  std::cout << " 8. RETURN TO MAIN MENU" << std::endl;
-  std::cout << "Enter Choice: ";
-
+void book::update_menu(database::Database* db) {
   int c;
-  std::cin >> c;
+  while (true) {
+    system("cls");
 
-  switch (c) {
-    case VIEW:
-      db->view_book();
-      getchar();
-      break;
+    std::cout << " UPDATE BOOKS" << std::endl;
+    std::cout << " 1. Name" << std::endl;
+    std::cout << " 2. Author" << std::endl;
+    std::cout << " 3. Price" << std::endl;
+    std::cout << " 4. Quantity" << std::endl;
+    std::cout << " 5. Return to Book Menu" << std::endl;
+    std::cout << "Enter Choice: ";
 
-    case ADD:
-      db->add_book();
-      getchar();
-      break;
+    std::cin >> c;
 
-    case SEARCH:
-      db->search_book();
-      getchar();
-      break;
+    switch (c) {
+      case 1:
+        db->update_book("name");
+        getchar();
+        break;
 
-    // Update menu?
-    case UPDATE_NAME:
-      db->search_book();
-      getchar();
-      break;
+      case 2:
+        db->update_book("author");
+        getchar();
+        break;
 
-    case UPDATE_AUTHOR:
-      db->search_book();
-      getchar();
-      break;
+      case 3:
+        db->update_book("price");
+        getchar();
+        break;
 
-    case UPDATE_PRICE:
-      db->search_book();
-      getchar();
-      break;
+      case 4:
+        db->update_book("quantity");
+        getchar();
+        break;
 
-    case UPDATE_QUANTITY:
-      db->search_book();
-      getchar();
-      break;
+      case 5:
+        return;
 
-    case RETURN:
-      db->search_book();
-      getchar();
-      break;
+      default:
+        std::cout << "Wrong Input." << std::endl;
+        getchar();
+    }
+  }
+  return;
+}
 
-    default:
-      std::cout << "Wrong Input" << std::endl;
-      getchar();
-      return;
+void book::menu(database::Database* db) {
+  int c;
+
+  while (true) {
+    system("cls");
+    std::cout << " BOOKS" << std::endl;
+    std::cout << " 1. View" << std::endl;
+    std::cout << " 2. Add" << std::endl;
+    std::cout << " 3. Search" << std::endl;
+    std::cout << " 4. Update" << std::endl;
+    std::cout << " 5. Return to Main Menu" << std::endl;
+    std::cout << "Enter Choice: ";
+
+    std::cin >> c;
+
+    switch (c) {
+      case VIEW:
+        db->view_book();
+        getchar();
+        break;
+
+      case ADD:
+        db->add_book();
+        getchar();
+        break;
+
+      case SEARCH:
+        db->search_book();
+        getchar();
+        break;
+
+      case UPDATE:
+        book::update_menu(db);
+        getchar();
+        break;
+
+      case RETURN:
+        return;
+
+      default:
+        std::cout << "Wrong Input" << std::endl;
+        getchar();
+    }
   }
   return;
 }
