@@ -1,28 +1,17 @@
-// Copyright [year] <Copyright Owner>
-// https://stackoverflow.com/questions/41407242/declaring-the-getch-function
-// https://cplusplus.com/reference/cstdio/getchar/
-// https://www.quora.com/Why-dont-we-use-include-stdio-h-in-C
-// https://www.freecodecamp.org/news/getline-in-cpp-cin-getline-function-example/
-
-#include "./book.h"
+// Copyright [year] <Copyright Owner>"  [legal/copyright]
+// https://stackoverflow.com/questions/7970617/how-can-i-check-if-char-variable-points-to-empty-string
+#include <mysql.h>
 
 #include <iostream>
+#include <sstream>
 
-#include "./database.h"
+#include "./table.h"
 
-enum Options {
-  VIEW = 1,
-  ADD,
-  SEARCH,
-  UPDATE,
-  RETURN,
-};
-
-void book::update_menu(database::Database* db) {
+void table::Book::update_menu(MYSQL* db_conn) {
   int c;
+
   while (true) {
     system("cls");
-
     std::cout << " UPDATE BOOKS" << std::endl;
     std::cout << " 1. Name" << std::endl;
     std::cout << " 2. Author" << std::endl;
@@ -32,26 +21,27 @@ void book::update_menu(database::Database* db) {
     std::cout << "Enter Choice: ";
 
     std::cin >> c;
-
+    std::string column = "";
+    std::string type = "";
     switch (c) {
       case 1:
-        db->update_book("name");
-        getchar();
+        column = "NAME";
+        type = "string";
         break;
 
       case 2:
-        db->update_book("author");
-        getchar();
+        column = "AUTHOR";
+        type = "string";
         break;
 
       case 3:
-        db->update_book("price");
-        getchar();
+        column = "PRICE";
+        type = "integer";
         break;
 
       case 4:
-        db->update_book("quantity");
-        getchar();
+        column = "QUANTITY";
+        type = "integer";
         break;
 
       case 5:
@@ -59,13 +49,68 @@ void book::update_menu(database::Database* db) {
 
       default:
         std::cout << "Wrong Input." << std::endl;
-        getchar();
     }
+
+    if (column != "") {
+      update(db_conn, column, type);
+    }
+    getchar();
   }
   return;
 }
 
-void book::menu(database::Database* db) {
+void table::Book::add(MYSQL* db_conn) {
+  system("cls");
+
+  std::string name;
+  std::string author;
+  int price;
+  int quantity;
+
+  std::cout << "Enter the BOOK NAME: ";
+  std::cin >> name;
+
+  std::cout << "Enter the BOOK AUTHOR: ";
+  std::cin >> author;
+
+  // Check input type
+  std::cout << "Enter the BOOK PRICE: ";
+  std::cin >> price;
+
+  std::cout << "Enter the BOOK QUANTITY: ";
+  std::cin >> quantity;
+
+  std::stringstream statement("");  // #include <sstream>
+  statement << "INSERT INTO " + table_name +
+                   "(NAME, AUTHOR, PRICE, QUANTITY) VALUES('"
+            << name << "','" << author << "'," << price << "," << quantity
+            << ");";
+  mysql_query(db_conn, statement.str().c_str());
+  MYSQL_RES* res_set = mysql_store_result(db_conn);
+
+  // Error Check
+  if (!std::string(mysql_error(db_conn)).empty()) {
+    std::cout << "MySQL Error:" << std::endl;
+    std::cout << mysql_error(db_conn) << std::endl;
+  }
+
+  if (mysql_errno(db_conn) != 0) {
+    std::cout << "MySQL Error Number:" << std::endl;
+    std::cout << mysql_errno(db_conn) << std::endl;
+  }
+
+  if (!res_set && (mysql_field_count(db_conn) == 0)) {
+    std::cout << "MySQL Field Count:" << std::endl;
+    std::cout << mysql_field_count(db_conn) << std::endl;
+  }
+
+  std::cout << "BOOK ADDED." << std::endl;
+
+  getchar();
+  return;
+}
+
+void table::Book::menu(MYSQL* db_conn) {
   int c;
 
   while (true) {
@@ -81,33 +126,34 @@ void book::menu(database::Database* db) {
     std::cin >> c;
 
     switch (c) {
-      case VIEW:
-        db->view_book();
-        getchar();
+      case 1:
+        view(db_conn);
         break;
-
-      case ADD:
-        db->add_book();
-        getchar();
+      case 2:
+        add(db_conn);
         break;
-
-      case SEARCH:
-        db->search_book();
-        getchar();
+      case 3:
+        search(db_conn);
         break;
-
-      case UPDATE:
-        book::update_menu(db);
-        getchar();
+      case 4:
+        update_menu(db_conn);
         break;
-
-      case RETURN:
+      case 5:
         return;
-
       default:
-        std::cout << "Wrong Input" << std::endl;
-        getchar();
+        std::cout << "Wrong Input." << std::endl;
     }
+    getchar();
   }
+  return;
+}
+
+void table::Book::print(MYSQL_ROW row) {
+  std::cout << "BOOK ID:" << row[0] << std::endl;
+  std::cout << "BOOK NAME: " << row[1] << std::endl;
+  std::cout << "BOOK AUTHOR: " << row[2] << std::endl;
+  std::cout << "BOOK PRICE: " << row[3] << std::endl;
+  std::cout << "BOOK QUANTITY: " << row[4] << std::endl;
+  std::cout << std::endl;
   return;
 }
