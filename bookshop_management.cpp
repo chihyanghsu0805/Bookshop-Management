@@ -5,17 +5,18 @@
 // https://stackoverflow.com/questions/29915854/why-does-c-require-breaks-in-switch-statements
 // https://github.com/Aryan-Khanijo/Bookshop-Management-System-CPP-Project
 // https://www.codeguru.com/database/database-programming-with-c-c/
-// g++ -o bookshop_management.exe bookshop_management.cpp database.cpp book.cpp
-// supplier.cpp -I "C:/Program Files/MySQL/MySQL Server 8.0/include/" -L
-// "C:/Program Files/MySQL/MySQL Server 8.0/lib/" -l libmysql
-// constants.cpp
+// https://stackoverflow.com/questions/5685471/error-jump-to-case-label-in-switch-statement
+// g++ -o bookshop_management.exe bookshop_management.cpp database.cpp -I
+// "C:/Program Files/MySQL/MySQL Server 8.0/include/" -L "C:/Program
+// Files/MySQL/MySQL Server 8.0/lib/" -l libmysql
 
 #include <iostream>
 
-#include "./book.h"
+// #include "./book.h"
 #include "./constants.h"
 #include "./database.h"
-#include "./supplier.h"
+// #include "./supplier.h"
+#include "./table.h"
 
 enum Options {
   BOOKS = 1,
@@ -57,14 +58,16 @@ int main() {
   while (true) {
     menu_choice = menu();
     switch (menu_choice) {
-      case BOOKS:
-        book::menu(db);
+      case BOOKS: {
+        table::Book* b = new table::Book();
+        b->menu(db->db_conn);
         break;  // Fall through
-
-      case SUPPLIERS:
-        supplier::menu(db);
+      }
+      case SUPPLIERS: {
+        table::Supplier* s = new table::Supplier();
+        s->menu(db->db_conn);
         break;
-
+      }
       /*
       case PURCHASES:
         menu::book();
@@ -79,15 +82,16 @@ int main() {
         menu::book();
 
       */
-      case EXIT:
+      case EXIT: {
         system("cls");
         return 0;
+      }
     }
     if (!std::cin) {
       std::cin.clear();
       std::cin.ignore();
     }
   }
-  // Should we return?
+  system("cls");
   return 0;
 }
