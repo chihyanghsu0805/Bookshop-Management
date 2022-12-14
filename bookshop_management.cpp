@@ -1,14 +1,7 @@
 // Copyright [year] <Copyright Owner>"  [legal/copyright]
-// If cin extract fails
-// https://www.learncpp.com/cpp-tutorial/stdcin-and-handling-invalid-input/
-// https://www.quora.com/What-is-the-difference-between-stdio-h-and-conio-h
-// https://stackoverflow.com/questions/29915854/why-does-c-require-breaks-in-switch-statements
+// This work is inspired by the following:
 // https://github.com/Aryan-Khanijo/Bookshop-Management-System-CPP-Project
 // https://www.codeguru.com/database/database-programming-with-c-c/
-// g++ -o bookshop_management.exe bookshop_management.cpp database.cpp book.cpp
-// supplier.cpp -I "C:/Program Files/MySQL/MySQL Server 8.0/include/" -L
-// "C:/Program Files/MySQL/MySQL Server 8.0/lib/" -l libmysql
-// constants.cpp
 
 #include <iostream>
 
@@ -17,14 +10,14 @@
 #include "./database.h"
 #include "./supplier.h"
 
-enum Options {
-  BOOKS = 1,
-  SUPPLIERS,
-  PURCHASES,
-  EMPLOYEES,
-  MEMBERS,
-  SALES,
-  EXIT
+enum SupplierMenuOptions {
+  books = 1,
+  suppliers,
+  purchases,
+  employees,
+  members,
+  sales,
+  exitMenu
 };
 
 int menu() {
@@ -57,14 +50,12 @@ int main() {
   while (true) {
     menu_choice = menu();
     switch (menu_choice) {
-      case BOOKS:
+      case SupplierMenuOptions::books:
         book::menu(db);
-        break;  // Fall through
-
-      case SUPPLIERS:
+        break;
+      case SupplierMenuOptions::suppliers:
         supplier::menu(db);
         break;
-
       /*
       case PURCHASES:
         menu::book();
@@ -79,7 +70,7 @@ int main() {
         menu::book();
 
       */
-      case EXIT:
+      case SupplierMenuOptions::exitMenu:
         system("cls");
         return 0;
     }
@@ -88,6 +79,6 @@ int main() {
       std::cin.ignore();
     }
   }
-  // Should we return?
+  system("cls");
   return 0;
 }
