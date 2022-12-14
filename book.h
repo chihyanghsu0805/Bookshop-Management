@@ -1,5 +1,5 @@
 // Copyright [year] <Copyright Owner>"  [legal/copyright]
-// For a static/global string constant, use a C style string instead.
+
 #ifndef BOOK_H_
 #define BOOK_H_
 
@@ -9,6 +9,7 @@ namespace book {
 
 void menu(database::Database*);
 void update_menu(database::Database*);
+void print(MYSQL_ROW);
 const char table_name[] = "book";
 
 }  // namespace book

@@ -1,8 +1,4 @@
 // Copyright [year] <Copyright Owner>
-// https://stackoverflow.com/questions/41407242/declaring-the-getch-function
-// https://cplusplus.com/reference/cstdio/getchar/
-// https://www.quora.com/Why-dont-we-use-include-stdio-h-in-C
-// https://www.freecodecamp.org/news/getline-in-cpp-cin-getline-function-example/
 
 #include "./book.h"
 
@@ -10,16 +6,34 @@
 
 #include "./database.h"
 
-enum Options {
-  VIEW = 1,
-  ADD,
-  SEARCH,
-  UPDATE,
-  RETURN,
+enum BookMenuOptions {
+  view = 1,
+  add,
+  search,
+  update,
+  returnToMain,
 };
+
+enum BookUpdateMenuOptions {
+  name = 1,
+  author,
+  price,
+  quantity,
+  returnToBook,
+};
+
+void book::print(MYSQL_ROW row) {
+  std::cout << book::table_name << " ID:" << row[0] << std::endl;
+  std::cout << book::table_name << " NAME: " << row[1] << std::endl;
+  std::cout << book::table_name << " AUTHOR: " << row[2] << std::endl;
+  std::cout << book::table_name << " PRICE: " << row[3] << std::endl;
+  std::cout << book::table_name << " QUANTITY: " << row[4] << std::endl;
+  std::cout << std::endl;
+}
 
 void book::update_menu(database::Database* db) {
   int c;
+
   while (true) {
     system("cls");
 
@@ -34,33 +48,24 @@ void book::update_menu(database::Database* db) {
     std::cin >> c;
 
     switch (c) {
-      case 1:
-        db->update_book("name");
-        getchar();
+      case BookUpdateMenuOptions::name:
+        db->update(book::table_name, "name", "string");
         break;
-
-      case 2:
-        db->update_book("author");
-        getchar();
+      case BookUpdateMenuOptions::author:
+        db->update(book::table_name, "author", "string");
         break;
-
-      case 3:
-        db->update_book("price");
-        getchar();
+      case BookUpdateMenuOptions::price:
+        db->update(book::table_name, "price", "integer");
         break;
-
-      case 4:
-        db->update_book("quantity");
-        getchar();
+      case BookUpdateMenuOptions::quantity:
+        db->update(book::table_name, "quantity", "integer");
         break;
-
-      case 5:
+      case BookUpdateMenuOptions::returnToBook:
         return;
-
       default:
         std::cout << "Wrong Input." << std::endl;
-        getchar();
     }
+    getchar();
   }
   return;
 }
@@ -81,33 +86,24 @@ void book::menu(database::Database* db) {
     std::cin >> c;
 
     switch (c) {
-      case VIEW:
-        db->view_book();
-        getchar();
+      case BookMenuOptions::view:
+        db->view(book::table_name);
         break;
-
-      case ADD:
+      case BookMenuOptions::add:
         db->add_book();
-        getchar();
         break;
-
-      case SEARCH:
-        db->search_book();
-        getchar();
+      case BookMenuOptions::search:
+        db->search(book::table_name);
         break;
-
-      case UPDATE:
+      case BookMenuOptions::update:
         book::update_menu(db);
-        getchar();
         break;
-
-      case RETURN:
+      case BookMenuOptions::returnToMain:
         return;
-
       default:
-        std::cout << "Wrong Input" << std::endl;
-        getchar();
+        std::cout << "Wrong Input." << std::endl;
     }
+    getchar();
   }
   return;
 }
