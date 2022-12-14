@@ -8,6 +8,18 @@ g++ -o bookshop_management.exe ./*.cpp -I "C:/Program Files/MySQL/MySQL Server 8
 
 ## Database Design
 
+- Book
+
+| Field | Type | Null | Key | Default | Extra |
+| --- | --- | --- | --- | --- | --- |
+| id | int | NO | PRI | NULL | auto_increment |
+| name | varchar(255) | YES | | NULL | |
+| author | varchar(255) | YES | | NULL | |
+| price | int | YES | | NULL | |
+| quantity | int | YES | | NULL | |
+
+- Supplier
+
 | Field | Type | Null | Key | Default | Extra |
 | --- | --- | --- | --- | --- | --- |
 | id | int | NO | PRI | NULL | auto_increment |

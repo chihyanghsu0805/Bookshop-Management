@@ -3,6 +3,7 @@
 #include "./book.h"
 
 #include <iostream>
+#include <sstream>
 
 #include "./database.h"
 
@@ -36,7 +37,6 @@ void book::update_menu(database::Database* db) {
 
   while (true) {
     system("cls");
-
     std::cout << " UPDATE BOOKS" << std::endl;
     std::cout << " 1. Name" << std::endl;
     std::cout << " 2. Author" << std::endl;
@@ -46,7 +46,8 @@ void book::update_menu(database::Database* db) {
     std::cout << "Enter Choice: ";
 
     std::cin >> c;
-
+    std::string column = "";
+    std::string type = "";
     switch (c) {
       case BookUpdateMenuOptions::name:
         db->update(book::table_name, "name", "string");
@@ -67,6 +68,10 @@ void book::update_menu(database::Database* db) {
     }
     getchar();
   }
+
+  std::cout << "BOOK ADDED." << std::endl;
+
+  getchar();
   return;
 }
 
