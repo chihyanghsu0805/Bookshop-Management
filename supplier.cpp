@@ -69,54 +69,6 @@ void supplier::update_menu(database::Database* db) {
   return;
 }
 
-void supplier::add(MYSQL* db_conn) {
-  system("cls");
-
-  std::string name;
-  std::string phone;
-  std::string address;
-
-  std::cout << "Enter the SUPPLIER NAME: ";
-  std::cin >> name;
-
-  std::cout << "Enter the SUPPLIER PHONE: ";
-  std::cin >> phone;
-
-  std::cout << "Enter the SUPPLIER ADDRESS: ";
-  std::cin >> address;
-
-  std::stringstream statement("");  // #include <sstream>
-  statement << "INSERT INTO " + table_name + "(NAME, PHONE, ADDRESS) VALUES("
-            << "'" << name << "'"
-            << ","
-            << "'" << phone << "'"
-            << ","
-            << "'" << address << "'"
-            << ");";
-  mysql_query(db_conn, statement.str().c_str());
-  MYSQL_RES* res_set = mysql_store_result(db_conn);
-
-  if (!std::string(mysql_error(db_conn)).empty()) {
-    std::cout << "MySQL Error:" << std::endl;
-    std::cout << mysql_error(db_conn) << std::endl;
-  }
-
-  if (mysql_errno(db_conn) != 0) {
-    std::cout << "MySQL Error Number:" << std::endl;
-    std::cout << mysql_errno(db_conn) << std::endl;
-  }
-
-  if (mysql_field_count(db_conn) == 0) {
-    std::cout << "MySQL Field Count:" << std::endl;
-    std::cout << mysql_field_count(db_conn) << std::endl;
-  }
-
-  std::cout << "SUPPLIER ADDED." << std::endl;
-
-  getchar();
-  return;
-}
-
 void supplier::menu(database::Database* db) {
   int c;
 
