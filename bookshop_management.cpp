@@ -1,31 +1,23 @@
 // Copyright [year] <Copyright Owner>"  [legal/copyright]
-// If cin extract fails
-// https://www.learncpp.com/cpp-tutorial/stdcin-and-handling-invalid-input/
-// https://www.quora.com/What-is-the-difference-between-stdio-h-and-conio-h
-// https://stackoverflow.com/questions/29915854/why-does-c-require-breaks-in-switch-statements
+// This work is inspired by the following:
 // https://github.com/Aryan-Khanijo/Bookshop-Management-System-CPP-Project
 // https://www.codeguru.com/database/database-programming-with-c-c/
-// https://stackoverflow.com/questions/5685471/error-jump-to-case-label-in-switch-statement
-// g++ -o bookshop_management.exe bookshop_management.cpp database.cpp -I
-// "C:/Program Files/MySQL/MySQL Server 8.0/include/" -L "C:/Program
-// Files/MySQL/MySQL Server 8.0/lib/" -l libmysql
 
 #include <iostream>
 
-// #include "./book.h"
+#include "./book.h"
 #include "./constants.h"
 #include "./database.h"
-// #include "./supplier.h"
-#include "./table.h"
+#include "./supplier.h"
 
-enum Options {
-  BOOKS = 1,
-  SUPPLIERS,
-  PURCHASES,
-  EMPLOYEES,
-  MEMBERS,
-  SALES,
-  EXIT
+enum SupplierMenuOptions {
+  books = 1,
+  suppliers,
+  purchases,
+  employees,
+  members,
+  sales,
+  exitMenu
 };
 
 int menu() {
@@ -58,16 +50,12 @@ int main() {
   while (true) {
     menu_choice = menu();
     switch (menu_choice) {
-      case BOOKS: {
-        table::Book* b = new table::Book();
-        b->menu(db->db_conn);
-        break;  // Fall through
-      }
-      case SUPPLIERS: {
-        table::Supplier* s = new table::Supplier();
-        s->menu(db->db_conn);
+      case SupplierMenuOptions::books:
+        book::menu(db);
         break;
-      }
+      case SupplierMenuOptions::suppliers:
+        supplier::menu(db);
+        break;
       /*
       case PURCHASES:
         menu::book();
@@ -82,10 +70,9 @@ int main() {
         menu::book();
 
       */
-      case EXIT: {
+      case SupplierMenuOptions::exitMenu:
         system("cls");
         return 0;
-      }
     }
     if (!std::cin) {
       std::cin.clear();

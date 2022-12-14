@@ -2,6 +2,10 @@
 
 Manage various bookshop objects in a MySQL database.
 
+## Compile Command
+
+g++ -o bookshop_management.exe ./*.cpp -I "C:/Program Files/MySQL/MySQL Server 8.0/include/" -L "C:/Program Files/MySQL/MySQL Server 8.0/lib/" -l libmysql
+
 ## Database Design
 
 - Book
@@ -24,5 +28,7 @@ Manage various bookshop objects in a MySQL database.
 | address | varchar(255) | YES | | NULL | |
 
 
+## Notes
 
+* [C++ Notes](./CPP.md)
 * [SQL Commands](./SQL.md)

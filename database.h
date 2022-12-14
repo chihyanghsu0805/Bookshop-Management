@@ -10,14 +10,27 @@
 namespace database {
 
 class Database {
- public:
-  MYSQL* db_conn;
+  MYSQL* connection;
+  MYSQL_RES* result_set;
+  MYSQL_ROW row;
 
-  void connect(const std::string,  // host
-               const std::string,  // user
-               const std::string,  // password
-               const std::string,  // database
-               const int);         // port
+ public:
+  void connect(const std::string, const std::string, const std::string,
+               const std::string, const int);
+
+  // Generic
+  void view(std::string);
+  void print_row(MYSQL_ROW, std::string);
+  void search(std::string);
+  bool search_id(std::string, int);
+  void update(std::string, std::string, std::string);
+  void remove(std::string);
+
+  // Book
+  void add_book();
+
+  // Supplier
+  void add_supplier();
 };
 
 }  // namespace database

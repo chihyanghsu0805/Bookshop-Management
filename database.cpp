@@ -1,5 +1,5 @@
 // Copyright [year] <Copyright Owner>
-// https://stackoverflow.com/questions/24255051/concatenate-char-arrays-in-c
+
 #include "./database.h"
 
 #include <mysql.h>
@@ -7,23 +7,276 @@
 #include <iostream>
 #include <sstream>
 
+#include "./book.h"
+#include "./supplier.h"
+
 void database::Database::connect(const std::string host, const std::string user,
                                  const std::string password,
                                  const std::string database, const int port) {
-  db_conn = mysql_init(NULL);
-  if (!db_conn)
+  connection = mysql_init(NULL);
+  if (!connection)
     std::cout << "MySQL initialization failed." << std::endl;
   else
     std::cout << "MySQL initialized." << std::endl;
 
-  db_conn =
-      mysql_real_connect(db_conn, host.c_str(), user.c_str(), password.c_str(),
-                         database.c_str(), port, NULL, 0);
+  connection =
+      mysql_real_connect(connection, host.c_str(), user.c_str(),
+                         password.c_str(), database.c_str(), port, NULL, 0);
 
-  if (!db_conn)
+  if (!connection)
     std::cout << "Connection Error." << std::endl;
   else
     std::cout << "Connected." << std::endl;
+
+  getchar();
+  return;
+}
+
+// Generic
+void database::Database::view(std::string table_name) {
+  system("cls");
+
+  std::stringstream statement("");
+  statement << "SELECT * FROM " + table_name + ";";
+  mysql_query(connection, statement.str().c_str());
+  result_set = mysql_store_result(connection);
+
+  // Need to count 40 rows and getchar() for more
+  while ((row = mysql_fetch_row(result_set)) != NULL) {
+    print_row(row, table_name);
+  }
+  getchar();
+  return;
+}
+
+void database::Database::print_row(MYSQL_ROW row, std::string table_name) {
+  if (table_name == book::table_name) book::print(row);
+  if (table_name == supplier::table_name) supplier::print(row);
+  return;
+}
+
+void database::Database::search(std::string table_name) {
+  system("cls");
+
+  int id;
+
+  std::cout << "Enter " + table_name + " ID to SEARCH: ";
+  std::cin >> id;
+
+  search_id(table_name, id);
+  getchar();
+  return;
+}
+
+bool database::Database::search_id(std::string table_name, int id) {
+  std::stringstream statement("");
+  statement << "SELECT * FROM " + table_name + " WHERE id = " << id << ";";
+  mysql_query(connection, statement.str().c_str());
+  result_set = mysql_store_result(connection);
+
+  bool found;
+
+  if ((row = mysql_fetch_row(result_set)) != NULL) {
+    found = true;
+    print_row(row, table_name);
+  } else {
+    std::cout << table_name + " not found." << std::endl;
+    found = false;
+  }
+  return found;
+}
+
+void database::Database::update(std::string table_name, std::string column,
+                                std::string entry_type) {
+  system("cls");
+
+  int id;
+  char c;
+
+  std::cout << "Enter " + table_name + " ID to UPDATE: ";
+  std::cin >> id;
+  if (search_id(table_name, id)) {
+    std::cout << "Do you want to UPDATE the " + table_name + " " + column +
+                     "? [Y/N]: ";
+    std::cin >> c;
+
+    if (c == 121 || c == 89) {
+      std::string value;
+      std::cout << "Enter the new " + table_name + " " + column + ": ";
+      std::cin >> value;
+
+      std::stringstream statement("");
+
+      // Concatenate char[] with string
+      // Convert string to integer
+      if (entry_type == "integer")
+        statement << "UPDATE " + table_name + " SET " + column + " = "
+                  << std::stoi(value) << " WHERE id = " << id << ";";
+
+      // Add single quotes for string
+      if (entry_type == "string")
+        statement << "UPDATE " + table_name + " SET " + column + " = "
+                  << "'" << value << "'"
+                  << " WHERE id = " << id << ";";
+
+      mysql_query(connection, statement.str().c_str());
+      result_set = mysql_store_result(connection);
+
+      search_id(table_name, id);
+
+      if (result_set != NULL) {  // Update successfuly returns pointer
+        std::cout << table_name + " " + column + " UPDATED." << std::endl;
+      } else if (!std::string(mysql_error(connection)).empty()) {
+        std::cout << "MySQL Error:" << std::endl;
+        std::cout << mysql_error(connection) << std::endl;
+      } else if (mysql_errno(connection) != 0) {
+        std::cout << "MySQL Error Number:" << std::endl;
+        std::cout << mysql_errno(connection) << std::endl;
+      } else if (mysql_field_count(connection) != 0) {
+        std::cout << "MySQL Field Count:" << std::endl;
+        std::cout << mysql_field_count(connection) << std::endl;
+      }
+    } else {
+      std::cout << table_name + " " + column + " not UPDATED.";
+    }
+  }
+  getchar();
+  return;
+}
+
+void database::Database::remove(std::string table_name) {
+  system("cls");
+
+  int id;
+  char c;
+
+  std::cout << "Enter " + table_name + " ID to REMOVE: ";
+  std::cin >> id;
+  if (search_id(table_name, id)) {
+    std::cout << "Do you want to REMOVE " + table_name + " " +
+                     std::to_string(id) + "? [Y/N]: ";
+    std::cin >> c;
+
+    if (c == 121 || c == 89) {
+      std::stringstream statement("");
+
+      statement << "DELETE FROM " + table_name + " WHERE id = " << id << ";";
+      mysql_query(connection, statement.str().c_str());
+      result_set = mysql_store_result(connection);
+
+      // Dont reset id due to other references
+      if (result_set != NULL) {  // Update successfuly returns pointer
+        std::cout << table_name + " REMOVED." << std::endl;
+      } else if (!std::string(mysql_error(connection)).empty()) {
+        std::cout << "MySQL Error:" << std::endl;
+        std::cout << mysql_error(connection) << std::endl;
+      } else if (mysql_errno(connection) != 0) {
+        std::cout << "MySQL Error Number:" << std::endl;
+        std::cout << mysql_errno(connection) << std::endl;
+      } else if (mysql_field_count(connection) != 0) {
+        std::cout << "MySQL Field Count:" << std::endl;
+        std::cout << mysql_field_count(connection) << std::endl;
+      } else {
+        std::cout << table_name + " REMOVED?" << std::endl;
+      }
+
+    } else {
+      std::cout << table_name + " not REMOVED.";
+    }
+  }
+  getchar();  // Ignore enter
+  return;
+}
+
+// Book
+void database::Database::add_book() {
+  system("cls");
+
+  std::string name;
+  std::string author;
+  std::string price;
+  std::string quantity;
+
+  std::cout << "Enter the " + std::string(book::table_name) + " NAME: ";
+  std::cin >> name;
+
+  std::cout << "Enter the " + std::string(book::table_name) + " AUTHOR: ";
+  std::cin >> author;
+
+  std::cout << "Enter the " + std::string(book::table_name) + " PRICE: ";
+  std::cin >> price;
+
+  std::cout << "Enter the " + std::string(book::table_name) + " QUANTITY: ";
+  std::cin >> quantity;
+
+  std::stringstream statement("");
+  statement << "INSERT INTO " + std::string(book::table_name) +
+                   "(NAME, AUTHOR, PRICE, QUANTITY) VALUES("
+            << "'" << name << "'"
+            << ","
+            << "'" << author << "'"
+            << "," << std::stoi(price) << "," << std::stoi(quantity) << ");";
+  mysql_query(connection, statement.str().c_str());
+  result_set = mysql_store_result(connection);
+
+  if (result_set == NULL) {  // Insert successful returns NULL
+    std::cout << "Entry added." << std::endl;
+  } else if (!std::string(mysql_error(connection)).empty()) {
+    std::cout << "MySQL Error:" << std::endl;
+    std::cout << mysql_error(connection) << std::endl;
+  } else if (mysql_errno(connection) != 0) {
+    std::cout << "MySQL Error Number:" << std::endl;
+    std::cout << mysql_errno(connection) << std::endl;
+  } else if (mysql_field_count(connection) != 0) {
+    std::cout << "MySQL Field Count:" << std::endl;
+    std::cout << mysql_field_count(connection) << std::endl;
+  }
+
+  getchar();
+  return;
+}
+
+// Supplier
+void database::Database::add_supplier() {
+  system("cls");
+
+  std::string name;
+  std::string phone;
+  std::string address;
+
+  std::cout << "Enter the " + std::string(supplier::table_name) + " NAME: ";
+  std::cin >> name;
+
+  std::cout << "Enter the " + std::string(supplier::table_name) + " PHONE: ";
+  std::cin >> phone;
+
+  std::cout << "Enter the " + std::string(supplier::table_name) + " ADDRESS: ";
+  std::cin >> address;
+
+  std::stringstream statement("");
+  statement << "INSERT INTO " + std::string(supplier::table_name) +
+                   "(NAME, PHONE, ADDRESS) VALUES("
+            << "'" << name << "'"
+            << ","
+            << "'" << phone << "'"
+            << ","
+            << "'" << address << "'"
+            << ");";
+  mysql_query(connection, statement.str().c_str());
+  result_set = mysql_store_result(connection);
+
+  if (result_set == NULL) {  // Insert successful returns NULL
+    std::cout << "Entry added." << std::endl;
+  } else if (!std::string(mysql_error(connection)).empty()) {
+    std::cout << "MySQL Error:" << std::endl;
+    std::cout << mysql_error(connection) << std::endl;
+  } else if (mysql_errno(connection) != 0) {
+    std::cout << "MySQL Error Number:" << std::endl;
+    std::cout << mysql_errno(connection) << std::endl;
+  } else if (mysql_field_count(connection) != 0) {
+    std::cout << "MySQL Field Count:" << std::endl;
+    std::cout << mysql_field_count(connection) << std::endl;
+  }
 
   getchar();
   return;

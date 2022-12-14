@@ -1,12 +1,40 @@
 // Copyright [year] <Copyright Owner>"  [legal/copyright]
+
+#include "./supplier.h"
+
 #include <mysql.h>
 
 #include <iostream>
 #include <sstream>
 
-#include "./table.h"
+#include "./database.h"
 
-void table::Supplier::update_menu(MYSQL* db_conn) {
+enum SupplierMenuOptions {
+  view = 1,
+  add,
+  remove,
+  search,
+  update,
+  returnToMain,
+};
+
+enum SupplierUpdateMenuOptions {
+  name = 1,
+  phone,
+  address,
+  returnToSupplier,
+};
+
+void supplier::print(MYSQL_ROW row) {
+  std::cout << supplier::table_name << " ID:" << row[0] << std::endl;
+  std::cout << supplier::table_name << " NAME: " << row[1] << std::endl;
+  std::cout << supplier::table_name << " PHONE: " << row[2] << std::endl;
+  std::cout << supplier::table_name << " NUMBER: " << row[3] << std::endl;
+  std::cout << std::endl;
+  return;
+}
+
+void supplier::update_menu(database::Database* db) {
   int c;
 
   while (true) {
@@ -22,85 +50,26 @@ void table::Supplier::update_menu(MYSQL* db_conn) {
     std::string column = "";
     std::string type = "";
     switch (c) {
-      case 1:
-        column = "NAME";
-        type = "string";
+      case SupplierUpdateMenuOptions::name:
+        db->update(supplier::table_name, "name", "string");
         break;
-
-      case 2:
-        column = "PHONE";
-        type = "string";
+      case SupplierUpdateMenuOptions::phone:
+        db->update(supplier::table_name, "phone", "string");
         break;
-
-      case 3:
-        column = "ADDRESS";
-        type = "string";
+      case SupplierUpdateMenuOptions::address:
+        db->update(supplier::table_name, "address", "string");
         break;
-
-      case 4:
+      case SupplierUpdateMenuOptions::returnToSupplier:
         return;
-
       default:
-        std::cout << "Wrong Input" << std::endl;
-    }
-
-    if (column != "") {
-      update(db_conn, column, type);
+        std::cout << "Wrong Input." << std::endl;
     }
     getchar();
   }
   return;
 }
 
-void table::Supplier::add(MYSQL* db_conn) {
-  system("cls");
-
-  std::string name;
-  std::string phone;
-  std::string address;
-
-  std::cout << "Enter the SUPPLIER NAME: ";
-  std::cin >> name;
-
-  std::cout << "Enter the SUPPLIER PHONE: ";
-  std::cin >> phone;
-
-  std::cout << "Enter the SUPPLIER ADDRESS: ";
-  std::cin >> address;
-
-  std::stringstream statement("");  // #include <sstream>
-  statement << "INSERT INTO " + table_name + "(NAME, PHONE, ADDRESS) VALUES("
-            << "'" << name << "'"
-            << ","
-            << "'" << phone << "'"
-            << ","
-            << "'" << address << "'"
-            << ");";
-  mysql_query(db_conn, statement.str().c_str());
-  MYSQL_RES* res_set = mysql_store_result(db_conn);
-
-  if (!std::string(mysql_error(db_conn)).empty()) {
-    std::cout << "MySQL Error:" << std::endl;
-    std::cout << mysql_error(db_conn) << std::endl;
-  }
-
-  if (mysql_errno(db_conn) != 0) {
-    std::cout << "MySQL Error Number:" << std::endl;
-    std::cout << mysql_errno(db_conn) << std::endl;
-  }
-
-  if (mysql_field_count(db_conn) == 0) {
-    std::cout << "MySQL Field Count:" << std::endl;
-    std::cout << mysql_field_count(db_conn) << std::endl;
-  }
-
-  std::cout << "SUPPLIER ADDED." << std::endl;
-
-  getchar();
-  return;
-}
-
-void table::Supplier::menu(MYSQL* db_conn) {
+void supplier::menu(database::Database* db) {
   int c;
 
   while (true) {
@@ -117,36 +86,27 @@ void table::Supplier::menu(MYSQL* db_conn) {
     std::cin >> c;
 
     switch (c) {
-      case 1:
-        view(db_conn);
+      case SupplierMenuOptions::view:
+        db->view(supplier::table_name);
         break;
-      case 2:
-        add(db_conn);
+      case SupplierMenuOptions::add:
+        db->add_supplier();
         break;
-      case 3:
-        search(db_conn);
+      case SupplierMenuOptions::remove:
+        db->remove(supplier::table_name);
         break;
-      case 4:
-        update_menu(db_conn);
+      case SupplierMenuOptions::search:
+        db->search(supplier::table_name);
         break;
-      case 5:
-        remove(db_conn);
+      case SupplierMenuOptions::update:
+        supplier::update_menu(db);
         break;
-      case 6:
+      case SupplierMenuOptions::returnToMain:
         return;
       default:
-        std::cout << "Wrong Input." << std::endl;
+        std::cout << "Wrong Input" << std::endl;
     }
     getchar();
   }
-  return;
-}
-
-void table::Supplier::print(MYSQL_ROW row) {
-  std::cout << "SUPPLIER ID:" << row[0] << std::endl;
-  std::cout << "SUPPLIER NAME: " << row[1] << std::endl;
-  std::cout << "SUPPLIER PHONE: " << row[2] << std::endl;
-  std::cout << "SUPPLIER ADDRESS: " << row[3] << std::endl;
-  std::cout << std::endl;
   return;
 }
