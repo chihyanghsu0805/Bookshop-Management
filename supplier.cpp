@@ -12,9 +12,9 @@
 enum SupplierMenuOptions {
   view = 1,
   add,
-  removeSupplier,
   search,
   update,
+  removeSupplier,
   returnToMain,
 };
 
@@ -92,14 +92,14 @@ void supplier::menu(database::Database* db) {
       case SupplierMenuOptions::add:
         db->add_supplier();
         break;
-      case SupplierMenuOptions::removeSupplier:
-        db->remove(supplier::table_name);
-        break;
       case SupplierMenuOptions::search:
         db->search(supplier::table_name);
         break;
       case SupplierMenuOptions::update:
         supplier::update_menu(db);
+        break;
+      case SupplierMenuOptions::removeSupplier:
+        db->remove(supplier::table_name);
         break;
       case SupplierMenuOptions::returnToMain:
         return;

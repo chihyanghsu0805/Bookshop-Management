@@ -25,6 +25,10 @@ class Database {
   bool search_id(std::string, int);
   void update(std::string, std::string, std::string);
   void remove(std::string);
+  bool check_errors();
+  void check_insert();
+  void check_update(std::string, std::string);
+  void check_remove(std::string);
 
   // Book
   void add_book();
