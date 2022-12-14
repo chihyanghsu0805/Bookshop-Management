@@ -6,14 +6,30 @@
 
 #include "./database.h"
 
-enum Options {
-  VIEW = 1,
-  ADD,
-  REMOVE,
-  SEARCH,
-  UPDATE,
-  RETURN,
+enum SupplierMenuOptions {
+  view = 1,
+  add,
+  remove,
+  search,
+  update,
+  returnToMain,
 };
+
+enum SupplierUpdateMenuOptions {
+  name = 1,
+  phone,
+  address,
+  returnToSupplier,
+};
+
+void supplier::print(MYSQL_ROW row) {
+  std::cout << supplier::table_name << " ID:" << row[0] << std::endl;
+  std::cout << supplier::table_name << " NAME: " << row[1] << std::endl;
+  std::cout << supplier::table_name << " PHONE: " << row[2] << std::endl;
+  std::cout << supplier::table_name << " NUMBER: " << row[3] << std::endl;
+  std::cout << std::endl;
+  return;
+}
 
 void supplier::update_menu(database::Database* db) {
   int c;
@@ -31,28 +47,21 @@ void supplier::update_menu(database::Database* db) {
     std::cin >> c;
 
     switch (c) {
-      case 1:
-        db->update_supplier("name");
-        getchar();
+      case SupplierUpdateMenuOptions::name:
+        db->update(supplier::table_name, "name", "string");
         break;
-
-      case 2:
-        db->update_supplier("phone");
-        getchar();
+      case SupplierUpdateMenuOptions::phone:
+        db->update(supplier::table_name, "phone", "string");
         break;
-
-      case 3:
-        db->update_supplier("address");
-        getchar();
+      case SupplierUpdateMenuOptions::address:
+        db->update(supplier::table_name, "address", "string");
         break;
-
-      case 4:
+      case SupplierUpdateMenuOptions::returnToSupplier:
         return;
-
       default:
         std::cout << "Wrong Input." << std::endl;
-        getchar();
     }
+    getchar();
   }
   return;
 }
@@ -74,38 +83,27 @@ void supplier::menu(database::Database* db) {
     std::cin >> c;
 
     switch (c) {
-      case VIEW:
-        db->view_supplier();
-        getchar();
+      case SupplierMenuOptions::view:
+        db->view(supplier::table_name);
         break;
-
-      case ADD:
+      case SupplierMenuOptions::add:
         db->add_supplier();
-        getchar();
         break;
-
-      case REMOVE:
-        db->remove_supplier();
-        getchar();
+      case SupplierMenuOptions::remove:
+        db->remove(supplier::table_name);
         break;
-
-      case SEARCH:
-        db->search_supplier();
-        getchar();
+      case SupplierMenuOptions::search:
+        db->search(supplier::table_name);
         break;
-
-      case UPDATE:
+      case SupplierMenuOptions::update:
         supplier::update_menu(db);
-        getchar();
         break;
-
-      case RETURN:
+      case SupplierMenuOptions::returnToMain:
         return;
-
       default:
         std::cout << "Wrong Input" << std::endl;
-        getchar();
     }
+    getchar();
   }
   return;
 }
