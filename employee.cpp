@@ -38,6 +38,43 @@ void employee::print(MYSQL_ROW row) {
   std::cout << std::endl;
 }
 
+std::string employee::prompt_add() {
+  std::string name;
+  std::string address;
+  std::string phone;
+  std::string join_date;
+  std::string salary;
+
+  std::cout << "Enter the " + std::string(employee::table_name) + " NAME: ";
+  std::cin >> name;
+
+  std::cout << "Enter the " + std::string(employee::table_name) + " ADDRESS: ";
+  std::cin >> address;
+
+  std::cout << "Enter the " + std::string(employee::table_name) + " PHONE: ";
+  std::cin >> phone;
+
+  std::cout << "Enter the " + std::string(employee::table_name) +
+                   " JOIN DATE (YYYY-MM-DD): ";
+  std::cin >> join_date;
+
+  std::cout << "Enter the " + std::string(employee::table_name) + " SALARY: ";
+  std::cin >> salary;
+
+  std::stringstream statement("");
+  statement << "INSERT INTO " + std::string(employee::table_name) +
+                   "(NAME, ADDRESS, PHONE, JOIN_DATE, SALARY) VALUES("
+            << "'" << name << "'"
+            << ","
+            << "'" << address << "'"
+            << ","
+            << "'" << phone << "'"
+            << ","
+            << "'" << join_date << "'"
+            << "," << std::stoi(salary) << ");";
+  return statement.str();
+}
+
 void employee::update_menu(database::Database* db) {
   int c;
 
