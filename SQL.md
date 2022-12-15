@@ -27,6 +27,10 @@ CREATE TABLE table (
     REFERENCES foreign(id)
 )
 
+ALTER TABLE table_name ADD column_name datatype;
+ALTER TABLE table_name MODIFY COLUMN column_type AFTER address;
+ALTER TABLE table_name MODIFY COLUMN column_name column_type DEFAULT default;
+
 INSERT INTO table (args) VALUES('strings', int);
 UPDATE table SET column = int [WHERE condition];
 UPDATE table SET column = 'string' [WHERE condition];
