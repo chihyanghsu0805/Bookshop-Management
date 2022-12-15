@@ -27,6 +27,18 @@ g++ -o bookshop_management.exe ./*.cpp -I "C:/Program Files/MySQL/MySQL Server 8
 | phone | varchar(255) | YES | | NULL | |
 | address | varchar(255) | YES | | NULL | |
 
+- Employee
+
+| Field | Type | Null | Key | Default | Extra |
+| --- | --- | --- | --- | --- | --- |
+| id | int | NO | PRI | NULL | auto_increment |
+| name | varchar(255) | YES | | NULL | |
+| phone | varchar(255) | YES | | NULL | |
+| address | varchar(255) | YES | | NULL | |
+| join_date | date | YES | | NULL | |
+| end_date | date | YES | | NULL | |
+| salary | int | YES | | NULL | |
+| manager | tinyint(1)  | YES | | false | |
 
 ## Notes
 

@@ -8,6 +8,7 @@
 #include "./book.h"
 #include "./constants.h"
 #include "./database.h"
+#include "./employee.h"
 #include "./supplier.h"
 
 enum SupplierMenuOptions {
@@ -40,7 +41,9 @@ int menu() {
 
 int main() {
   system("cls");
-  // Database should already exists.
+  // Login
+
+  // Database should already exists
   database::Database* db = new database::Database();
   db->connect(connection_constants::host, connection_constants::user,
               connection_constants::password, connection_constants::database,
@@ -59,10 +62,19 @@ int main() {
       /*
       case PURCHASES:
         menu::book();
-
-      case EMPLOYEES:
-        menu::book();
-
+      */
+      case employees:
+        // Should we use abstract class for manager/employee permission?
+        // Or password is good enough?
+        employee::menu(db);
+        break;
+        /*
+        if (prompt_manager())
+          employee::menu(db);
+        else
+          std::cout << "Manager Only." << std::endl;
+        */
+      /*
       case MEMBERS:
         menu::book();
 
