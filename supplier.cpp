@@ -34,6 +34,33 @@ void supplier::print(MYSQL_ROW row) {
   return;
 }
 
+std::string supplier::prompt_add() {
+  std::string name;
+  std::string phone;
+  std::string address;
+
+  std::cout << "Enter the " + std::string(supplier::table_name) + " NAME: ";
+  std::cin >> name;
+
+  std::cout << "Enter the " + std::string(supplier::table_name) + " PHONE: ";
+  std::cin >> phone;
+
+  std::cout << "Enter the " + std::string(supplier::table_name) + " ADDRESS: ";
+  std::cin >> address;
+
+  std::stringstream statement("");
+  statement << "INSERT INTO " + std::string(supplier::table_name) +
+                   "(NAME, PHONE, ADDRESS) VALUES("
+            << "'" << name << "'"
+            << ","
+            << "'" << phone << "'"
+            << ","
+            << "'" << address << "'"
+            << ");";
+
+  return statement.str();
+}
+
 void supplier::update_menu(database::Database* db) {
   int c;
 

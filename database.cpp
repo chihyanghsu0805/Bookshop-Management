@@ -219,32 +219,8 @@ void database::Database::check_remove(std::string table_name) {
 void database::Database::add_book() {
   system("cls");
 
-  std::string name;
-  std::string author;
-  std::string price;
-  std::string quantity;
-
-  std::cout << "Enter the " + std::string(book::table_name) + " NAME: ";
-  std::cin >> name;
-
-  std::cout << "Enter the " + std::string(book::table_name) + " AUTHOR: ";
-  std::cin >> author;
-
-  std::cout << "Enter the " + std::string(book::table_name) + " PRICE: ";
-  std::cin >> price;
-
-  std::cout << "Enter the " + std::string(book::table_name) + " QUANTITY: ";
-  std::cin >> quantity;
-
-  std::stringstream statement("");
-  statement << "INSERT INTO " + std::string(book::table_name) +
-                   "(NAME, AUTHOR, PRICE, QUANTITY) VALUES("
-            << "'" << name << "'"
-            << ","
-            << "'" << author << "'"
-            << "," << std::stoi(price) << "," << std::stoi(quantity) << ");";
-
-  mysql_query(connection, statement.str().c_str());
+  std::string s = book::prompt_add();
+  mysql_query(connection, s.c_str());
   result_set = mysql_store_result(connection);
 
   check_insert();
@@ -257,30 +233,8 @@ void database::Database::add_book() {
 void database::Database::add_supplier() {
   system("cls");
 
-  std::string name;
-  std::string phone;
-  std::string address;
-
-  std::cout << "Enter the " + std::string(supplier::table_name) + " NAME: ";
-  std::cin >> name;
-
-  std::cout << "Enter the " + std::string(supplier::table_name) + " PHONE: ";
-  std::cin >> phone;
-
-  std::cout << "Enter the " + std::string(supplier::table_name) + " ADDRESS: ";
-  std::cin >> address;
-
-  std::stringstream statement("");
-  statement << "INSERT INTO " + std::string(supplier::table_name) +
-                   "(NAME, PHONE, ADDRESS) VALUES("
-            << "'" << name << "'"
-            << ","
-            << "'" << phone << "'"
-            << ","
-            << "'" << address << "'"
-            << ");";
-
-  mysql_query(connection, statement.str().c_str());
+  std::string s = supplier::prompt_add();
+  mysql_query(connection, s.c_str());
   result_set = mysql_store_result(connection);
 
   check_insert();
@@ -293,41 +247,8 @@ void database::Database::add_supplier() {
 void database::Database::add_employee() {
   system("cls");
 
-  std::string name;
-  std::string address;
-  std::string phone;
-  std::string join_date;
-  std::string salary;
-
-  std::cout << "Enter the " + std::string(employee::table_name) + " NAME: ";
-  std::cin >> name;
-
-  std::cout << "Enter the " + std::string(employee::table_name) + " ADDRESS: ";
-  std::cin >> address;
-
-  std::cout << "Enter the " + std::string(employee::table_name) + " PHONE: ";
-  std::cin >> phone;
-
-  std::cout << "Enter the " + std::string(employee::table_name) +
-                   " JOIN DATE (YYYY-MM-DD): ";
-  std::cin >> join_date;
-
-  std::cout << "Enter the " + std::string(employee::table_name) + " SALARY: ";
-  std::cin >> salary;
-
-  std::stringstream statement("");
-  statement << "INSERT INTO " + std::string(employee::table_name) +
-                   "(NAME, ADDRESS, PHONE, JOIN_DATE, SALARY) VALUES("
-            << "'" << name << "'"
-            << ","
-            << "'" << address << "'"
-            << ","
-            << "'" << phone << "'"
-            << ","
-            << "'" << join_date << "'"
-            << "," << std::stoi(salary) << ");";
-
-  mysql_query(connection, statement.str().c_str());
+  std::string s = employee::prompt_add();
+  mysql_query(connection, s.c_str());
   result_set = mysql_store_result(connection);
 
   check_insert();

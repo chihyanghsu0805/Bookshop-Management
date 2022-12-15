@@ -31,6 +31,34 @@ void book::print(MYSQL_ROW row) {
   std::cout << book::table_name << " QUANTITY: " << row[4] << std::endl;
   std::cout << std::endl;
 }
+std::string book::prompt_add() {
+  std::string name;
+  std::string author;
+  std::string price;
+  std::string quantity;
+
+  std::cout << "Enter the " + std::string(book::table_name) + " NAME: ";
+  std::cin >> name;
+
+  std::cout << "Enter the " + std::string(book::table_name) + " AUTHOR: ";
+  std::cin >> author;
+
+  std::cout << "Enter the " + std::string(book::table_name) + " PRICE: ";
+  std::cin >> price;
+
+  std::cout << "Enter the " + std::string(book::table_name) + " QUANTITY: ";
+  std::cin >> quantity;
+
+  std::stringstream statement("");
+  statement << "INSERT INTO " + std::string(book::table_name) +
+                   "(NAME, AUTHOR, PRICE, QUANTITY) VALUES("
+            << "'" << name << "'"
+            << ","
+            << "'" << author << "'"
+            << "," << std::stoi(price) << "," << std::stoi(quantity) << ");";
+
+  return statement.str();
+}
 
 void book::update_menu(database::Database* db) {
   int c;
