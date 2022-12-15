@@ -35,6 +35,9 @@ class Database {
 
   // Supplier
   void add_supplier();
+
+  // Employee
+  void add_employee();
 };
 
 }  // namespace database

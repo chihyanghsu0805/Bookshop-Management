@@ -8,6 +8,7 @@
 #include <sstream>
 
 #include "./book.h"
+#include "./employee.h"
 #include "./supplier.h"
 
 void database::Database::connect(const std::string host, const std::string user,
@@ -38,6 +39,7 @@ void database::Database::view(std::string table_name) {
 
   std::stringstream statement("");
   statement << "SELECT * FROM " + table_name + ";";
+
   mysql_query(connection, statement.str().c_str());
   result_set = mysql_use_result(connection);
 
@@ -52,6 +54,7 @@ void database::Database::view(std::string table_name) {
 void database::Database::print_row(MYSQL_ROW row, std::string table_name) {
   if (table_name == book::table_name) book::print(row);
   if (table_name == supplier::table_name) supplier::print(row);
+  if (table_name == employee::table_name) employee::print(row);
   return;
 }
 
@@ -71,6 +74,7 @@ void database::Database::search(std::string table_name) {
 bool database::Database::search_id(std::string table_name, int id) {
   std::stringstream statement("");
   statement << "SELECT * FROM " + table_name + " WHERE id = " << id << ";";
+
   mysql_query(connection, statement.str().c_str());
   result_set = mysql_store_result(connection);
 
@@ -117,6 +121,10 @@ void database::Database::update(std::string table_name, std::string column,
       if (entry_type == "string")
         statement << "UPDATE " + table_name + " SET " + column + " = "
                   << "'" << value << "'"
+                  << " WHERE id = " << id << ";";
+
+      if (entry_type == "boolean")
+        statement << "UPDATE " + table_name + " SET " + column + " = " << value
                   << " WHERE id = " << id << ";";
 
       mysql_query(connection, statement.str().c_str());
@@ -235,6 +243,7 @@ void database::Database::add_book() {
             << ","
             << "'" << author << "'"
             << "," << std::stoi(price) << "," << std::stoi(quantity) << ");";
+
   mysql_query(connection, statement.str().c_str());
   result_set = mysql_store_result(connection);
 
@@ -270,6 +279,54 @@ void database::Database::add_supplier() {
             << ","
             << "'" << address << "'"
             << ");";
+
+  mysql_query(connection, statement.str().c_str());
+  result_set = mysql_store_result(connection);
+
+  check_insert();
+
+  getchar();
+  return;
+}
+
+// Employee
+void database::Database::add_employee() {
+  system("cls");
+
+  std::string name;
+  std::string address;
+  std::string phone;
+  std::string join_date;
+  std::string salary;
+
+  std::cout << "Enter the " + std::string(employee::table_name) + " NAME: ";
+  std::cin >> name;
+
+  std::cout << "Enter the " + std::string(employee::table_name) + " ADDRESS: ";
+  std::cin >> address;
+
+  std::cout << "Enter the " + std::string(employee::table_name) + " PHONE: ";
+  std::cin >> phone;
+
+  std::cout << "Enter the " + std::string(employee::table_name) +
+                   " JOIN DATE (YYYY-MM-DD): ";
+  std::cin >> join_date;
+
+  std::cout << "Enter the " + std::string(employee::table_name) + " SALARY: ";
+  std::cin >> salary;
+
+  std::stringstream statement("");
+  statement << "INSERT INTO " + std::string(employee::table_name) +
+                   "(NAME, ADDRESS, PHONE, JOIN_DATE, SALARY) VALUES("
+            << "'" << name << "'"
+            << ","
+            << "'" << address << "'"
+            << ","
+            << "'" << phone << "'"
+            << ","
+            << "'" << join_date << "'"
+            << "," << std::stoi(salary) << ");";
+
   mysql_query(connection, statement.str().c_str());
   result_set = mysql_store_result(connection);
 
