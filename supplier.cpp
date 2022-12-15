@@ -64,6 +64,10 @@ void supplier::update_menu(database::Database* db) {
       default:
         std::cout << "Wrong Input." << std::endl;
     }
+    if (!std::cin) {
+      std::cin.clear();
+      std::cin.ignore();
+    }
     getchar();
   }
   return;
@@ -105,6 +109,10 @@ void supplier::menu(database::Database* db) {
         return;
       default:
         std::cout << "Wrong Input" << std::endl;
+    }
+    if (!std::cin) {
+      std::cin.clear();
+      std::cin.ignore();
     }
     getchar();
   }

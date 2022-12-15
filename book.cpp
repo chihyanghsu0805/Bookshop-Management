@@ -66,12 +66,12 @@ void book::update_menu(database::Database* db) {
       default:
         std::cout << "Wrong Input." << std::endl;
     }
+    if (!std::cin) {
+      std::cin.clear();
+      std::cin.ignore();
+    }
     getchar();
   }
-
-  std::cout << "BOOK ADDED." << std::endl;
-
-  getchar();
   return;
 }
 
@@ -107,6 +107,10 @@ void book::menu(database::Database* db) {
         return;
       default:
         std::cout << "Wrong Input." << std::endl;
+    }
+    if (!std::cin) {
+      std::cin.clear();
+      std::cin.ignore();
     }
     getchar();
   }
