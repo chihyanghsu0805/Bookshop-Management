@@ -11,7 +11,7 @@
 #include "./employee.h"
 #include "./supplier.h"
 
-enum SupplierMenuOptions {
+enum MenuOptions {
   books = 1,
   suppliers,
   purchases,
@@ -38,25 +38,38 @@ int menu() {
 
   return c;
 }
+/*
+void prompt_password() {
+  std::string user;
+  std::string password;
 
+  std:: cout << "User: ";
+  std:: cin >> user;
+
+  std:: cout << "Password: ";
+  std:: cin >> password;
+}
+*/
 int main() {
   system("cls");
   // Login
+  /*
 
+  */
   // Database should already exists
   database::Database* db = new database::Database();
-  db->connect(connection_constants::host, connection_constants::user,
-              connection_constants::password, connection_constants::database,
-              connection_constants::port);
+  bool connected =
+      db->connect(connection_constants::host, connection_constants::user,
+                  connection_constants::password,
+                  connection_constants::database, connection_constants::port);
 
-  int menu_choice;
-  while (true) {
-    menu_choice = menu();
+  while (connected) {
+    int menu_choice = menu();
     switch (menu_choice) {
-      case SupplierMenuOptions::books:
+      case MenuOptions::books:
         book::menu(db);
         break;
-      case SupplierMenuOptions::suppliers:
+      case MenuOptions::suppliers:
         supplier::menu(db);
         break;
       /*
@@ -82,7 +95,7 @@ int main() {
         menu::book();
 
       */
-      case SupplierMenuOptions::exitMenu:
+      case MenuOptions::exitMenu:
         system("cls");
         return 0;
     }
