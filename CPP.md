@@ -25,3 +25,5 @@ enum
 https://en.cppreference.com/w/cpp/language/enum
 
 https://eklitzke.org/declaring-c-string-constants-the-right-way
+
+https://stackoverflow.com/questions/860339/what-is-the-difference-between-public-private-and-protected-inheritance-in-c
