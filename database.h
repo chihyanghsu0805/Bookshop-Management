@@ -15,7 +15,7 @@ class Database {
   MYSQL_ROW row;
 
  public:
-  void connect(const std::string, const std::string, const std::string,
+  bool connect(const std::string, const std::string, const std::string,
                const std::string, const int);
 
   // Generic

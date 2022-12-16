@@ -13,6 +13,11 @@ static const char password[] = "0000";
 static const char database[] = "bookshop_management";
 static const int port = 3306;
 };  // namespace connection_constants
-// extern const int PASSWORD;
+
+namespace personnel_constants {
+static const int staff = 2222;
+static const int manager = 1111;
+static const int owner = 0000;
+};  // namespace personnel_constants
 
 #endif  // CONSTANTS_H_

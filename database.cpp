@@ -11,7 +11,7 @@
 #include "./employee.h"
 #include "./supplier.h"
 
-void database::Database::connect(const std::string host, const std::string user,
+bool database::Database::connect(const std::string host, const std::string user,
                                  const std::string password,
                                  const std::string database, const int port) {
   connection = mysql_init(NULL);
@@ -30,7 +30,7 @@ void database::Database::connect(const std::string host, const std::string user,
     std::cout << "Connected." << std::endl;
 
   getchar();
-  return;
+  return connection != NULL;
 }
 
 // Generic

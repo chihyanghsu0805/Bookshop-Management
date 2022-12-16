@@ -9,88 +9,52 @@
 #include "./constants.h"
 #include "./database.h"
 #include "./employee.h"
+#include "./personnel.h"
 #include "./supplier.h"
 
-enum SupplierMenuOptions {
-  books = 1,
-  suppliers,
-  purchases,
-  employees,
-  members,
-  sales,
-  exitMenu
-};
+std::string prompt_password() {
+  std::string user;
+  int password;
 
-int menu() {
-  system("cls");
-  std::cout << " BOOKSHOP MANGEMENT SYSTEM" << std::endl;
-  std::cout << " 1. Books" << std::endl;
-  std::cout << " 2. Suppliers" << std::endl;
-  std::cout << " 3. Purchases" << std::endl;
-  std::cout << " 4. Employees" << std::endl;
-  std::cout << " 5. Members" << std::endl;
-  std::cout << " 6. Sales" << std::endl;
-  std::cout << " 7. Exit" << std::endl;
-  std::cout << "Enter Choice: ";
+  std::cout << "Password: ";
+  std::cin >> password;
 
-  int c;
-  std::cin >> c;
+  if (password == personnel_constants::staff) {
+    user = "staff";
+  } else if (password == personnel_constants::manager) {
+    user = "manager";
+  } else if (password == personnel_constants::owner) {
+    user = "owner";
+  }
 
-  return c;
+  return user;
 }
 
 int main() {
   system("cls");
   // Login
+  std::string user = prompt_password();
 
-  // Database should already exists
-  database::Database* db = new database::Database();
-  db->connect(connection_constants::host, connection_constants::user,
-              connection_constants::password, connection_constants::database,
-              connection_constants::port);
+  if (user.empty()) return 0;
 
-  int menu_choice;
-  while (true) {
-    menu_choice = menu();
-    switch (menu_choice) {
-      case SupplierMenuOptions::books:
-        book::menu(db);
-        break;
-      case SupplierMenuOptions::suppliers:
-        supplier::menu(db);
-        break;
-      /*
-      case PURCHASES:
-        menu::book();
-      */
-      case employees:
-        // Should we use abstract class for manager/employee permission?
-        // Or password is good enough?
-        employee::menu(db);
-        break;
-        /*
-        if (prompt_manager())
-          employee::menu(db);
-        else
-          std::cout << "Manager Only." << std::endl;
-        */
-      /*
-      case MEMBERS:
-        menu::book();
+  std::cout << "Login Successful." << std::endl;
+  getchar();
 
-      case SALES:
-        menu::book();
-
-      */
-      case SupplierMenuOptions::exitMenu:
-        system("cls");
-        return 0;
-    }
-    if (!std::cin) {
-      std::cin.clear();
-      std::cin.ignore();
-    }
+  if (user == "staff") {
+    identification::Staff* p = new identification::Staff();
+    p->manage_bookshop();
   }
+
+  if (user == "manager") {
+    identification::Manager* p = new identification::Manager();
+    p->manage_bookshop();
+  }
+
+  if (user == "owner") {
+    identification::Owner* p = new identification::Owner();
+    p->manage_bookshop();
+  }
+
   system("cls");
   return 0;
 }
