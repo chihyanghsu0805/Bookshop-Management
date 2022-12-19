@@ -38,6 +38,9 @@ class Database {
 
   // Employee
   void add_employee();
+
+  // Member
+  void add_member();
 };
 
 }  // namespace database

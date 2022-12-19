@@ -1,7 +1,4 @@
 // Copyright [year] <Copyright Owner>"  [legal/copyright]
-// This work is inspired by the following:
-// https://github.com/Aryan-Khanijo/Bookshop-Management-System-CPP-Project
-// https://www.codeguru.com/database/database-programming-with-c-c/
 
 #include <iostream>
 

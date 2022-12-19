@@ -8,6 +8,7 @@
 #include "./constants.h"
 #include "./database.h"
 #include "./employee.h"
+#include "./member.h"
 #include "./supplier.h"
 
 enum MainMenuOptions {
@@ -50,6 +51,9 @@ void identification::Personnel::manage_supplier(database::Database* db) {
 void identification::Personnel::manage_employee(database::Database* db) {
   employee::menu(db);
 }
+void identification::Personnel::manage_member(database::Database* db) {
+  member::menu(db);
+}
 
 void identification::Personnel::manage_bookshop() {
   // Database should already exists
@@ -63,11 +67,9 @@ void identification::Personnel::manage_bookshop() {
     int menu_choice = main_menu();
     switch (menu_choice) {
       case MainMenuOptions::books:
-        // book::menu(db);
         this->manage_book(db);
         break;
       case MainMenuOptions::suppliers:
-        // supplier::menu(db);
         this->manage_supplier(db);
         break;
       /*
@@ -75,21 +77,12 @@ void identification::Personnel::manage_bookshop() {
         menu::book();
       */
       case employees:
-        // Should we use abstract class for manager/employee permission?
-        // Or password is good enough?
-        // employee::menu(db);
         this->manage_employee(db);
         break;
-        /*
-        if (prompt_manager())
-          employee::menu(db);
-        else
-          std::cout << "Manager Only." << std::endl;
-        */
-      /*
-      case MEMBERS:
-        menu::book();
 
+      case members:
+        this->manage_member(db);
+      /*
       case SALES:
         menu::book();
 

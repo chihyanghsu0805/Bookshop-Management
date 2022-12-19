@@ -12,10 +12,10 @@ DROP TABLE table;
 
 CREATE TABLE IF NOT EXISTS table (
   id INT NOT NULL AUTO_INCREMENT, `PRIMARY KEY`
-  name varchar(255),
-  author varchar(255),
-  price INT,
-  quantity INT,
+  name varchar(255) DEFAULT 'x',
+  author varchar(255) DEFAULT 'x',
+  price INT DEFAULT x,
+  quantity INT DEFAULT x,
   PRIMARY KEY (id)
 );
 

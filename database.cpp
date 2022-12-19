@@ -9,6 +9,7 @@
 
 #include "./book.h"
 #include "./employee.h"
+#include "./member.h"
 #include "./supplier.h"
 
 bool database::Database::connect(const std::string host, const std::string user,
@@ -55,6 +56,7 @@ void database::Database::print_row(MYSQL_ROW row, std::string table_name) {
   if (table_name == book::table_name) book::print(row);
   if (table_name == supplier::table_name) supplier::print(row);
   if (table_name == employee::table_name) employee::print(row);
+  if (table_name == member::table_name) member::print(row);
   return;
 }
 
@@ -248,6 +250,20 @@ void database::Database::add_employee() {
   system("cls");
 
   std::string s = employee::prompt_add();
+  mysql_query(connection, s.c_str());
+  result_set = mysql_store_result(connection);
+
+  check_insert();
+
+  getchar();
+  return;
+}
+
+// Member
+void database::Database::add_member() {
+  system("cls");
+
+  std::string s = member::prompt_add();
   mysql_query(connection, s.c_str());
   result_set = mysql_store_result(connection);
 
