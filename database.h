@@ -46,6 +46,10 @@ class Database {
   // Purchase
   void add_purchase();
   void update_inventory();
+
+  // Sales
+  void add_sales();
+  void summarize_sales();
 };
 
 }  // namespace database

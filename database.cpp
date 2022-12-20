@@ -11,6 +11,7 @@
 #include "./employee.h"
 #include "./member.h"
 #include "./purchase.h"
+#include "./sales.h"
 #include "./supplier.h"
 
 bool database::Database::connect(const std::string host, const std::string user,
@@ -22,9 +23,9 @@ bool database::Database::connect(const std::string host, const std::string user,
   else
     std::cout << "MySQL initialized." << std::endl;
 
-  connection =
-      mysql_real_connect(connection, host.c_str(), user.c_str(),
-                         password.c_str(), database.c_str(), port, NULL, 0);
+  connection = mysql_real_connect(connection, host.c_str(), user.c_str(),
+                                  password.c_str(), database.c_str(), port,
+                                  NULL, CLIENT_MULTI_STATEMENTS);
 
   if (!connection)
     std::cout << "Connection Error." << std::endl;
@@ -59,6 +60,7 @@ void database::Database::print_row(MYSQL_ROW row, std::string table_name) {
   if (table_name == employee::table_name) employee::print(row);
   if (table_name == member::table_name) member::print(row);
   if (table_name == purchase::table_name) purchase::print(row);
+  if (table_name == sales::table_name) sales::print(row);
   return;
 }
 
@@ -276,8 +278,12 @@ void database::Database::add_member() {
 }
 void database::Database::update_valid() {
   std::stringstream statement("");
-  statement << "UPDATE MEMBER SET valid = false WHERE end_date <= curdate();";
+  statement << "UPDATE " + std::string(member::table_name) +
+                   " SET valid = false WHERE end_date <= curdate();";
   mysql_query(connection, statement.str().c_str());
+  result_set = mysql_store_result(connection);
+  check_update(member::table_name, "valid");
+  return;
 }
 
 // Purchase
@@ -303,22 +309,131 @@ void database::Database::update_inventory() {
   purchase_statement << "SELECT book_id, quantity FROM " +
                             std::string(purchase::table_name) +
                             " WHERE RECEIVED = 'T' AND INVENTORY = 0;";
+
   mysql_query(connection, purchase_statement.str().c_str());
-  result_set = mysql_store_result(connection);
+  result_set = mysql_use_result(connection);
+
+  std::stringstream book_statement("");
 
   while ((row = mysql_fetch_row(result_set)) != NULL) {
     book_id = atoi(row[0]);
     quantity = atoi(row[1]);
 
-    std::stringstream book_statement("");
     book_statement << "UPDATE " + std::string(book::table_name) +
                           " SET QUANTITY = QUANTITY+"
                    << quantity << " WHERE id = " << book_id << ";";
-    mysql_query(connection, book_statement.str().c_str());
   }
 
-  purchase_statement
+  mysql_query(connection, book_statement.str().c_str());
+  result_set = mysql_store_result(connection);
+
+  check_update(book::table_name, "quantity");
+
+  std::stringstream update_statement("");
+  update_statement
       << "UPDATE " + std::string(purchase::table_name) +
              " SET INVENTORY = 1 WHERE RECEIVED = 'T' AND INVENTORY = 0;";
-  mysql_query(connection, purchase_statement.str().c_str());
+
+  mysql_query(connection, update_statement.str().c_str());
+  result_set = mysql_store_result(connection);
+
+  check_update(purchase::table_name, "inventory");
+}
+
+// Sales
+void database::Database::add_sales() {
+  system("cls");
+
+  int book_id;
+  int member_id;
+  int quantity;
+  int bill;
+  int stock;
+  int price;
+
+  std::cout << "Enter the " + std::string(book::table_name) + " ID: ";
+  std::cin >> book_id;
+
+  if (!search_id(book::table_name, book_id)) {
+    std::cout << "Book not found." << std::endl;
+    getchar();
+    return;
+  }
+
+  std::cout << "Enter the " + std::string(member::table_name) + " ID: ";
+  std::cin >> member_id;
+
+  if (!search_id(member::table_name, member_id)) {
+    std::cout << "Member not found." << std::endl;
+    getchar();
+    return;
+  }
+
+  // Check valid member
+
+  std::cout << "Enter the " + std::string(sales::table_name) + " QUANTITY: ";
+  std::cin >> quantity;
+
+  std::stringstream statement("");
+  statement << "SELECT QUANTITY, PRICE FROM " + std::string(book::table_name) +
+                   " WHERE id = "
+            << book_id << ";";
+
+  mysql_query(connection, statement.str().c_str());
+  result_set = mysql_store_result(connection);
+
+  if ((row = mysql_fetch_row(result_set)) != NULL) {
+    stock = atoi(row[0]);
+    price = atoi(row[1]);
+
+    if (stock < quantity) {
+      std::cout << "Not enough stock." << std::endl;
+      getchar();
+    } else {
+      bill = quantity * price;
+
+      std::stringstream sales_statement("");
+      sales_statement
+          << "INSERT INTO " + std::string(sales::table_name) +
+                 " (member_id, book_id, quantity, bill, date) VALUES ("
+          << member_id << "," << book_id << "," << quantity << "," << bill
+          << ","
+          << "curdate());";
+      mysql_query(connection, sales_statement.str().c_str());
+      result_set = mysql_store_result(connection);
+
+      check_insert();
+
+      std::stringstream book_statement("");
+      book_statement << "UPDATE " + std::string(book::table_name) +
+                            " SET QUANTITY = QUANTITY-"
+                     << quantity << " WHERE id = " << book_id << ";";
+      mysql_query(connection, book_statement.str().c_str());
+      result_set = mysql_store_result(connection);
+
+      check_update(book::table_name, "quantity");
+    }
+  }
+
+  getchar();
+  return;
+}
+
+void database::Database::summarize_sales() {
+  int year_sale = 0;
+
+  std::stringstream statement("");
+  statement << "SELECT bill FROM " + std::string(sales::table_name) +
+                   " WHERE year(date) = year(curdate());";
+  mysql_query(connection, statement.str().c_str());
+  result_set = mysql_use_result(connection);
+
+  while ((row = mysql_fetch_row(result_set)) != NULL) {
+    year_sale += atoi(row[0]);
+  }
+
+  std::cout << "Sales this year: " << year_sale << std::endl;
+
+  getchar();
+  return;
 }

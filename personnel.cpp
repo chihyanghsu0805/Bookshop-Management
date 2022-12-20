@@ -10,6 +10,7 @@
 #include "./employee.h"
 #include "./member.h"
 #include "./purchase.h"
+#include "./sales.h"
 #include "./supplier.h"
 
 enum MainMenuOptions {
@@ -18,7 +19,7 @@ enum MainMenuOptions {
   purchases,
   employees,
   members,
-  sales,
+  book_sales,
   exitMenu
 };
 
@@ -60,6 +61,9 @@ void identification::Personnel::manage_member(database::Database* db) {
 void identification::Personnel::manage_purchase(database::Database* db) {
   purchase::menu(db);
 }
+void identification::Personnel::manage_sales(database::Database* db) {
+  sales::menu(db);
+}
 
 // Manage bookshop
 void identification::Personnel::manage_bookshop() {
@@ -89,11 +93,9 @@ void identification::Personnel::manage_bookshop() {
       case members:
         this->manage_member(db);
         break;
-      /*
-      case SALES:
-        menu::book();
-
-      */
+      case book_sales:
+        this->manage_sales(db);
+        break;
       case MainMenuOptions::exitMenu:
         system("cls");
         return;

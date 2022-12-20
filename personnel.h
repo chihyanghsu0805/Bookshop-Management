@@ -13,6 +13,7 @@ class Personnel {
   virtual void manage_employee(database::Database*);
   virtual void manage_member(database::Database*);
   virtual void manage_purchase(database::Database*);
+  virtual void manage_sales(database::Database*);
   virtual void manage_supplier(database::Database*);
 
  public:
