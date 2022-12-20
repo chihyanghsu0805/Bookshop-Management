@@ -33,6 +33,7 @@ ALTER TABLE table_name CHANGE old_name new_name datatype;
 INSERT INTO table (args) VALUES('strings', int);
 UPDATE table SET column = int [WHERE condition];
 UPDATE table SET column = 'string' [WHERE condition];
+UPDATE table SET column = column+integerValueToAdd [WHERE condition];
 DELETE FROM table [WHERE condition];
 
 CREATE ROLE 'role1', 'role2';
@@ -40,5 +41,3 @@ GRANT ALL ON database.* TO role;
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 GRANT role TO 'user'@'localhost';
 ```
-
-UPDATE yourTableName SET yourColumnName = yourColumnName+integerValueToAdd WHERE yourCondition;
