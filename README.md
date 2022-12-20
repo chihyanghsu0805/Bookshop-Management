@@ -10,7 +10,7 @@ This work is inspired by the following:
 
 ## Object Interactions
 
-![alt text](bookshop_management.png "Object Interactions")
+![alt text](bookshop_management_red.png "Object Interactions")
 
 ## Compile Command
 
