@@ -17,48 +17,62 @@ Columns can not be null for viewing.
 
 - Book
 
-| Field | Type | Null | Key | Default | Extra |
-| --- | --- | --- | --- | --- | --- |
-| id | int | NO | PRI | NULL | auto_increment |
-| name | varchar(255) | NO | | name | |
-| author | varchar(255) | NO | | author | |
-| price | int | NO | | 0 | |
-| quantity | int | NO | | 0 | |
+| Field    | Type         | Null | Key | Default | Extra          |
+|----------|--------------|------|-----|---------|----------------|
+| id       | int          | NO   | PRI | NULL    | auto_increment |
+| name     | varchar(255) | YES  |     | name    |                |
+| author   | varchar(255) | YES  |     | author  |                |
+| price    | int          | YES  |     | 0       |                |
+| quantity | int          | YES  |     | 0       |                |
 
 - Supplier
 
-| Field | Type | Null | Key | Default | Extra |
-| --- | --- | --- | --- | --- | --- |
-| id | int | NO | PRI | NULL | auto_increment |
-| name | varchar(255) | NO | | name | |
-| phone | varchar(255) | NO | | phone | |
-| address | varchar(255) | NO | | address | |
+| Field   | Type         | Null | Key | Default | Extra          |
+|---------|--------------|------|-----|---------|----------------|
+| id      | int          | NO   | PRI | NULL    | auto_increment |
+| name    | varchar(255) | YES  |     | name    |                |
+| phone   | varchar(255) | YES  |     | phone   |                |
+| address | varchar(255) | YES  |     | address |                |
 
 - Employee
 
-| Field | Type | Null | Key | Default | Extra |
-| --- | --- | --- | --- | --- | --- |
-| id | int | NO | PRI | NULL | auto_increment |
-| name | varchar(255) | NO | | phone | |
-| phone | varchar(255) | NO | | phone | |
-| address | varchar(255) | NO | | address | |
-| join_date | date | NO | | 1900-01-01 | |
-| end_date | date | NO | | 1900-01-01 | |
-| salary | int | NO | | 0 | |
-| manager | tinyint(1)  | NO | | false | |
+| Field     | Type         | Null | Key | Default    | Extra          |
+|-----------|--------------|------|-----|------------|----------------|
+| id        | int          | NO   | PRI | NULL       | auto_increment |
+| name      | varchar(255) | YES  |     | name       |                |
+| address   | varchar(255) | YES  |     | address    |                |
+| phone     | varchar(255) | YES  |     | phone      |                |
+| join_date | date         | YES  |     | 1900-01-01 |                |
+| end_date  | date         | YES  |     | 1900-01-01 |                |
+| salary    | int          | YES  |     | 0          |                |
+| manager   | tinyint(1)   | YES  |     | 0          |                |
 
 - Member
 
-| Field | Type | Null | Key | Default | Extra |
-| --- | --- | --- | --- | --- | --- |
-| id | int | NO | PRI | NULL | auto_increment |
-| name | varchar(255) | NO | | name | |
-| phone | varchar(255) | NO | | phone | |
-| address | varchar(255) | NO | | address | |
-| join_date | date | NO | | 1900-01-01 | |
-| end_date | date | NO | | 1900-01-01 | |
+| Field     | Type         | Null | Key | Default    | Extra          |
+|-----------|--------------|------|-----|------------|----------------|
+| id        | int          | NO   | PRI | NULL       | auto_increment |
+| name      | varchar(255) | YES  |     | name       |                |
+| address   | varchar(255) | YES  |     | address    |                |
+| phone     | varchar(255) | YES  |     | phone      |                |
+| join_date | date         | YES  |     | 1900-01-01 |                |
+| end_date  | date         | YES  |     | 2100-12-31 |                |
+| valid     | tinyint(1)   | YES  |     | 1          |                |
+
+- Purchase
+
+| Field       | Type       | Null | Key | Default | Extra          |
+|-------------|------------|------|-----|---------|----------------+
+| id          | int        | NO   | PRI | NULL    | auto_increment |
+| quantity    | int        | YES  |     | NULL    |                |
+| order_date  | date       | YES  |     | NULL    |                |
+| expect_date | date       | YES  |     | NULL    |                |
+| received    | char(1)    | YES  |     | F       |                |
+| book_id     | int        | YES  | MUL | NULL    |                |
+| supplier_id | int        | YES  | MUL | NULL    |                |
+| inventory   | tinyint(1) | YES  |     | 0       |                |
 
 ## Notes
 
-* [C++ Notes](./CPP.md)
-* [SQL Commands](./SQL.md)
+- [C++ Notes](./CPP.md)
+- [SQL Commands](./SQL.md)
