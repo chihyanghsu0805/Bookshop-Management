@@ -29,3 +29,5 @@ https://eklitzke.org/declaring-c-string-constants-the-right-way
 https://stackoverflow.com/questions/860339/what-is-the-difference-between-public-private-and-protected-inheritance-in-c
 
 https://stackoverflow.com/questions/1306778/virtual-pure-virtual-explained
+
+https://stackoverflow.com/questions/12417378/cast-from-char-to-int-loses-precision

@@ -19,17 +19,16 @@ CREATE TABLE IF NOT EXISTS table (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE table (
-  id INT,
+CREATE TABLE IF NOT exists table (
+  id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   foreign_id INT,
-  INDEX par_ind (foreign_id,),
-  FOREIGN KEY (foreign_id)
-    REFERENCES foreign(id)
+  FOREIGN KEY (book_id) REFERENCES book(id),
 )
 
 ALTER TABLE table_name ADD column_name datatype;
 ALTER TABLE table_name MODIFY column_name column_type AFTER address;
 ALTER TABLE table_name MODIFY column_name column_type DEFAULT default;
+ALTER TABLE table_name CHANGE old_name new_name datatype;
 
 INSERT INTO table (args) VALUES('strings', int);
 UPDATE table SET column = int [WHERE condition];
@@ -41,3 +40,5 @@ GRANT ALL ON database.* TO role;
 CREATE USER 'user'@'localhost' IDENTIFIED BY 'password';
 GRANT role TO 'user'@'localhost';
 ```
+
+UPDATE yourTableName SET yourColumnName = yourColumnName+integerValueToAdd WHERE yourCondition;

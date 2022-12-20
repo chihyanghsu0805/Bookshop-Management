@@ -12,6 +12,7 @@ class Personnel {
   virtual void manage_book(database::Database*);
   virtual void manage_employee(database::Database*);
   virtual void manage_member(database::Database*);
+  virtual void manage_purchase(database::Database*);
   virtual void manage_supplier(database::Database*);
 
  public:
@@ -19,23 +20,16 @@ class Personnel {
 };
 
 class Owner : public Personnel {
-  // void manage_book(database::Database*);
-  // void manage_employee(database::Database*);
-  // void manage_member(database::Database*);
-  // void manage_supplier(database::Database*);
+  // Owner can do everything
 };
 
 class Manager : public Personnel {
-  // void manage_books(database::Database*);
   void manage_employee(database::Database*);
-  // void manage_member(database::Database*);
-  // void manage_supplier(database::Database*);
 };
 
 class Staff : public Personnel {
-  // void manage_book(database::Database*);
   void manage_employee(database::Database*);
-  // void manage_member(database::Database*);
+  void manage_purchase(database::Database*);
   void manage_supplier(database::Database*);
 };
 

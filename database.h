@@ -41,6 +41,11 @@ class Database {
 
   // Member
   void add_member();
+  void update_valid();
+
+  // Purchase
+  void add_purchase();
+  void update_inventory();
 };
 
 }  // namespace database

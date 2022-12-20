@@ -9,6 +9,7 @@
 #include "./database.h"
 #include "./employee.h"
 #include "./member.h"
+#include "./purchase.h"
 #include "./supplier.h"
 
 enum MainMenuOptions {
@@ -39,7 +40,7 @@ int main_menu() {
   return c;
 }
 
-// Override
+// Override?
 void identification::Personnel::manage_book(database::Database* db) {
   book::menu(db);
 }
@@ -51,10 +52,16 @@ void identification::Personnel::manage_supplier(database::Database* db) {
 void identification::Personnel::manage_employee(database::Database* db) {
   employee::menu(db);
 }
+
 void identification::Personnel::manage_member(database::Database* db) {
   member::menu(db);
 }
 
+void identification::Personnel::manage_purchase(database::Database* db) {
+  purchase::menu(db);
+}
+
+// Manage bookshop
 void identification::Personnel::manage_bookshop() {
   // Database should already exists
   database::Database* db = new database::Database();
@@ -64,6 +71,7 @@ void identification::Personnel::manage_bookshop() {
                   connection_constants::database, connection_constants::port);
 
   while (connected) {
+    db->update_valid();
     int menu_choice = main_menu();
     switch (menu_choice) {
       case MainMenuOptions::books:
@@ -72,16 +80,15 @@ void identification::Personnel::manage_bookshop() {
       case MainMenuOptions::suppliers:
         this->manage_supplier(db);
         break;
-      /*
-      case PURCHASES:
-        menu::book();
-      */
+      case MainMenuOptions::purchases:
+        this->manage_purchase(db);
+        break;
       case employees:
         this->manage_employee(db);
         break;
-
       case members:
         this->manage_member(db);
+        break;
       /*
       case SALES:
         menu::book();
@@ -108,5 +115,9 @@ void identification::Staff::manage_supplier(database::Database* db) {
 }
 
 void identification::Staff::manage_employee(database::Database* db) {
+  std::cout << "Access Denied." << std::endl;
+}
+
+void identification::Staff::manage_purchase(database::Database* db) {
   std::cout << "Access Denied." << std::endl;
 }

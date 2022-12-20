@@ -31,6 +31,7 @@ void member::print(MYSQL_ROW row) {
   std::cout << member::table_name << " PHONE: " << row[3] << std::endl;
   std::cout << member::table_name << " JOIN DATE: " << row[4] << std::endl;
   std::cout << member::table_name << " END DATE: " << row[5] << std::endl;
+  std::cout << member::table_name << " VALID: " << row[6] << std::endl;
   std::cout << std::endl;
 }
 
