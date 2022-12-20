@@ -72,6 +72,17 @@ Columns can not be null for viewing.
 | supplier_id | int        | YES  | MUL | NULL    |                |
 | inventory   | tinyint(1) | YES  |     | 0       |                |
 
+- Sales
+
+| Field     | Type | Null | Key | Default | Extra          |
+|-----------|------|------|-----|---------|----------------|
+| id        | int  | NO   | PRI | NULL    | auto_increment |
+| member_id | int  | YES  | MUL | NULL    |                |
+| book_id   | int  | YES  | MUL | NULL    |                |
+| quantity  | int  | YES  |     | NULL    |                |
+| bill      | int  | YES  |     | NULL    |                |
+| date      | date | YES  |     | NULL    |                |
+
 ## Notes
 
 - [C++ Notes](./CPP.md)
