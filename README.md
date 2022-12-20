@@ -7,6 +7,11 @@ This work is inspired by the following:
 -   https://github.com/Aryan-Khanijo/Bookshop-Management-System-CPP-Project
 -   https://www.codeguru.com/database/database-programming-with-c-c/
 
+
+## Object Interactions
+
+![alt text](bookshop_management.png "Object Interactions")
+
 ## Compile Command
 
 g++ -o bookshop_management.exe ./*.cpp -I "C:/Program Files/MySQL/MySQL Server 8.0/include/" -L "C:/Program Files/MySQL/MySQL Server 8.0/lib/" -l libmysql
