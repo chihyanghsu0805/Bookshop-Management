@@ -62,7 +62,7 @@ Columns can not be null for viewing.
 - Purchase
 
 | Field       | Type       | Null | Key | Default | Extra          |
-|-------------|------------|------|-----|---------|----------------+
+|-------------|------------|------|-----|---------|----------------|
 | id          | int        | NO   | PRI | NULL    | auto_increment |
 | quantity    | int        | YES  |     | NULL    |                |
 | order_date  | date       | YES  |     | NULL    |                |
