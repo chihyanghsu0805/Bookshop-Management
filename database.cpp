@@ -10,6 +10,7 @@
 #include "./book.h"
 #include "./employee.h"
 #include "./member.h"
+#include "./purchase.h"
 #include "./supplier.h"
 
 bool database::Database::connect(const std::string host, const std::string user,
@@ -57,6 +58,7 @@ void database::Database::print_row(MYSQL_ROW row, std::string table_name) {
   if (table_name == supplier::table_name) supplier::print(row);
   if (table_name == employee::table_name) employee::print(row);
   if (table_name == member::table_name) member::print(row);
+  if (table_name == purchase::table_name) purchase::print(row);
   return;
 }
 
@@ -271,4 +273,52 @@ void database::Database::add_member() {
 
   getchar();
   return;
+}
+void database::Database::update_valid() {
+  std::stringstream statement("");
+  statement << "UPDATE MEMBER SET valid = false WHERE end_date <= curdate();";
+  mysql_query(connection, statement.str().c_str());
+}
+
+// Purchase
+void database::Database::add_purchase() {
+  system("cls");
+
+  std::string s = purchase::prompt_add();
+
+  mysql_query(connection, s.c_str());
+  result_set = mysql_store_result(connection);
+
+  check_insert();
+
+  getchar();
+  return;
+}
+
+void database::Database::update_inventory() {
+  int book_id;
+  int quantity;
+
+  std::stringstream purchase_statement("");
+  purchase_statement << "SELECT book_id, quantity FROM " +
+                            std::string(purchase::table_name) +
+                            " WHERE RECEIVED = 'T' AND INVENTORY = 0;";
+  mysql_query(connection, purchase_statement.str().c_str());
+  result_set = mysql_store_result(connection);
+
+  while ((row = mysql_fetch_row(result_set)) != NULL) {
+    book_id = atoi(row[0]);
+    quantity = atoi(row[1]);
+
+    std::stringstream book_statement("");
+    book_statement << "UPDATE " + std::string(book::table_name) +
+                          " SET QUANTITY = QUANTITY+"
+                   << quantity << " WHERE id = " << book_id << ";";
+    mysql_query(connection, book_statement.str().c_str());
+  }
+
+  purchase_statement
+      << "UPDATE " + std::string(purchase::table_name) +
+             " SET INVENTORY = 1 WHERE RECEIVED = 'T' AND INVENTORY = 0;";
+  mysql_query(connection, purchase_statement.str().c_str());
 }
